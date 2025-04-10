@@ -47,6 +47,8 @@ docker-compose up -d
 
 If your settings are correct, downloading should start immediatly if it is within the set hours.
 
+Finished downloads can be found in `downloads/finished`. The files in that folder can safely be moved elsewhere.
+
 ---
 ### 3. Stop container
 

@@ -1,5 +1,5 @@
 services:
-  stinolocos-ftp-downloader:
+  stinos-ftp-downloader:
     build: .
     container_name: Stinos-FTP-Downloader
     volumes:

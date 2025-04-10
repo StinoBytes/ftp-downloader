@@ -9,20 +9,20 @@ check_time_window() {
   # Time window check
   CURRENT_HOUR=$(date +%H)
   if [[ $DOWNLOAD_HOURS == *-* ]]; then
-    START_HOUR=$(echo $DOWNLOAD_HOURS | cut -d'-' -f1)
-    END_HOUR=$(echo $DOWNLOAD_HOURS | cut -d'-' -f2)
+    START_HOUR=$(echo "$DOWNLOAD_HOURS" | cut -d'-' -f1)
+    END_HOUR=$(echo "$DOWNLOAD_HOURS" | cut -d'-' -f2)
 
-    if [ $START_HOUR -eq $END_HOUR ]; then
+    if [ "$START_HOUR" -eq "$END_HOUR" ]; then
       return
     fi
 
-    if [ $START_HOUR -lt $END_HOUR ]; then
-      if [ $CURRENT_HOUR -lt $START_HOUR ] || [ $CURRENT_HOUR -ge $END_HOUR ]; then
+    if [ "$START_HOUR" -lt "$END_HOUR" ]; then
+      if [ "$CURRENT_HOUR" -lt "$START_HOUR" ] || [ "$CURRENT_HOUR" -ge "$END_HOUR" ]; then
         echo "Current hour ($CURRENT_HOUR) is outside download window ($DOWNLOAD_HOURS). Exiting."
         exit 0
       fi
     else
-      if [ $CURRENT_HOUR -lt $START_HOUR ] && [ $CURRENT_HOUR -ge $END_HOUR ]; then
+      if [ "$CURRENT_HOUR" -lt "$START_HOUR" ] && [ "$CURRENT_HOUR" -ge "$END_HOUR" ]; then
         echo "Current hour ($CURRENT_HOUR) is outside download window ($DOWNLOAD_HOURS). Exiting."
         exit 0
       fi
@@ -44,13 +44,16 @@ mkdir -p "$FTP_TARGET/finished"
 chmod -R 777 "$FTP_TARGET" # Ensure permissions are correct
 
 # Source the track_downloads script for the register_download function
+# shellcheck source=/dev/null
 source /app/track_downloads.sh
 
 # Function to extract server path from lftp-transfer.log
 get_server_path() {
   local FILE="$1"
-  local filename=$(basename "$FILE")
-  local rel_path=$(dirname "${FILE#$FTP_TARGET/active/}")
+  local filename
+  filename=$(basename "$FILE")
+  local rel_path
+  rel_path=$(dirname "${FILE#"$FTP_TARGET"/active/}")
 
   # Get the server path from lftp-transfer.log if it exists
   if [ -f "$FTP_TARGET/lftp-transfer.log" ]; then
@@ -64,7 +67,8 @@ get_server_path() {
   fi
 
   # Fallback: construct path with simple space encoding
-  local encoded_name=$(echo "$filename" | sed 's/ /%20/g')
+  local encoded_name
+  encoded_name=$(echo "$filename" | sed 's/ /%20/g')
   echo "/ROMS/$rel_path/$encoded_name"
 }
 
@@ -75,8 +79,10 @@ process_completed_file() {
 
   if [ -f "$FILE" ]; then
     # Get file information
-    local filename=$(basename "$FILE")
-    local dir_path=$(dirname "$FILE")
+    local filename
+    filename=$(basename "$FILE")
+    local dir_path
+    dir_path=$(dirname "$FILE")
 
     # Skip if this is a temporary file
     if [[ "$filename" == *.lftp-pget-status ]]; then
@@ -93,10 +99,11 @@ process_completed_file() {
     echo "Processing: $FILE" >>"$LOG"
 
     # Extract the relative path
-    local relative_path=${dir_path#$FTP_TARGET/active/}
+    local relative_path=${dir_path#"$FTP_TARGET"/active/}
 
     # Get the exact server path from the transfer log
-    local server_filepath=$(get_server_path "$FILE")
+    local server_filepath
+    server_filepath=$(get_server_path "$FILE")
     echo "Server filepath: $server_filepath" >>"$LOG"
 
     # Create destination directory structure in finished folder
@@ -128,7 +135,7 @@ sqlite3 /db/downloads.db "SELECT remote_path, filename FROM downloaded_files;" \
   | while IFS='|' read -r remote_path filename; do
     # Create a pattern in the format that LFTP expects (relative path with spaces)
     clean_ftp_source="${FTP_SOURCE#/}"
-    pattern="${remote_path#${clean_ftp_source}/}/${filename}"
+    pattern="${remote_path#"${clean_ftp_source}"/}/${filename}"
     echo "$pattern" >>"$FTP_TARGET/exclude-list.txt"
     echo "Added exclusion: $pattern" >>"$FTP_TARGET/download.log"
   done
