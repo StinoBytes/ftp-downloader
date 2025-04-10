@@ -15,6 +15,10 @@ cp .env.example .env
 
 1.2. Edit the .env file with your settings.
 
+```bash
+nano .env
+```
+
 ### 2. Start container
 
 2.1 Navigate to the root of the project and start with:
