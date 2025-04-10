@@ -1,0 +1,16 @@
+services:
+  stinolocos-ftp-downloader:
+    build: .
+    container_name: Stinos-FTP-Downloader
+    volumes:
+      - ./downloads:/data
+      - ./db:/db
+      - ./logs:/var/log
+    environment:
+      - FTP_HOST=${FTP_HOST}
+      - FTP_USER=${FTP_USER}
+      - FTP_PASS=${FTP_PASS}
+      - FTP_SOURCE=${FTP_SOURCE}
+      - DOWNLOAD_HOURS=${DOWNLOAD_HOURS}
+      - TZ=${TZ}
+    restart: unless-stopped
