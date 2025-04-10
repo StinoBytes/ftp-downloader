@@ -5,12 +5,20 @@ Simple FTP downloader with schedule and database. Runs in a Docker container.
 > [!WARNING]
 > **SSL verification is DISABLED** at the moment! This project is still under development. It will be added later.
 
-### Configure environment
+### 1. Configure environment
 
-1. Copy the example environment config file:
+1.1. Copy the example environment config file:
 
 ```bash
 cp .env.example .env
 ```
 
-2. Edit the .env file with your settings.
+1.2. Edit the .env file with your settings.
+
+### 2. Start container
+
+2.1 Navigate to the root of the project and start with:
+
+```bash
+docker-compose up -d
+```
