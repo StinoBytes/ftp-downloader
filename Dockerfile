@@ -7,7 +7,9 @@ RUN apk add --no-cache \
     bash \
     tzdata \
     coreutils \
-    busybox-suid
+    busybox-suid && \
+    rm -rf /var/cache/apk/* /tmp/* && \
+    rm -rf /usr/share/man/* /usr/share/doc/*
 
 # Create directories with explicit permissions
 RUN mkdir -p /app /data /db /var/log && \
