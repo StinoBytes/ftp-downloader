@@ -2,9 +2,6 @@
 
 Simple FTP downloader with schedule and database. Runs in a Docker container.
 
-> [!IMPORTANT]
-> **Legal Disclaimer:** This tool is intended for downloading legal content only. The author is not responsible for any misuse of this software or for downloading copyrighted material without permission. Users are solely responsible for ensuring compliance with applicable laws and regulations when using this tool.
-
 > [!WARNING]
 > **SSL verification is DISABLED** at the moment! This project is still under development. It will be added later. Use at your own risk.
 
@@ -57,5 +54,10 @@ Navigate to the root of the project and stop the container with:
 ```bash
 docker-compose down
 ```
+
+---
+
+<!-- > [!NOTE] -->
+> **Legal Disclaimer:** This tool is intended for downloading legal content only. The author is not responsible for any misuse of this software or for downloading copyrighted material without permission. Users are solely responsible for ensuring compliance with applicable laws and regulations when using this tool.
 
 ---
